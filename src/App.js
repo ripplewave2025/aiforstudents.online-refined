@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { 
   Brain, ArrowRight, User, Lock, Video, CheckCircle, Clock, ShieldCheck, 
   Play, BookOpen, MessageCircle, BarChart, Menu, X, Target, Key, LogOut, 
@@ -946,6 +947,7 @@ const App = () => {
 
   return (
     <>
+      <Analytics />
       {currentView === 'landing' && <LandingPage setCurrentView={setCurrentView} />}
       
       {currentView === 'student-login' && (
