@@ -40,36 +40,9 @@ export const Hero = ({ onStart }) => {
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 pt-20">
             {/* Animated Background Grid */}
+            {/* Animated Background Grid - Removed for Space Theme */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <motion.div
-                    className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]"
-                    animate={{
-                        backgroundPosition: ['0px 0px', '60px 60px']
-                    }}
-                    transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: 'linear'
-                    }}
-                />
-
-                {/* Gradient Orbs */}
-                <motion.div
-                    className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px]"
-                    animate={{
-                        x: [0, 50, 0],
-                        y: [0, -30, 0],
-                    }}
-                    transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-                />
-                <motion.div
-                    className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[80px]"
-                    animate={{
-                        x: [0, -40, 0],
-                        y: [0, 40, 0],
-                    }}
-                    transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-                />
+                {/* 3D Space Background will go here in App.js */}
             </div>
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
@@ -80,11 +53,11 @@ export const Hero = ({ onStart }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-blue-400 text-sm font-medium mb-8 backdrop-blur-sm"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs font-medium mb-8 backdrop-blur-sm tracking-widest uppercase"
                     >
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        <span className="relative flex h-1.5 w-1.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-40"></span>
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
                         </span>
                         Education, Reimagined
                     </motion.div>
@@ -94,11 +67,11 @@ export const Hero = ({ onStart }) => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
-                        className="text-5xl md:text-7xl font-sans font-bold text-white mb-6 leading-[1.1] tracking-tight"
+                        className="text-5xl md:text-7xl font-heading font-light text-white mb-6 leading-[1.1] tracking-tight"
                     >
                         From passive consumption
                         <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-purple-500">
+                        <span className="text-white font-normal">
                             to active mastery.
                         </span>
                     </motion.h1>
@@ -108,9 +81,9 @@ export const Hero = ({ onStart }) => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6, duration: 0.8 }}
-                        className="text-xl md:text-2xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed"
+                        className="text-lg md:text-xl text-zinc-400 mb-12 max-w-2xl mx-auto leading-relaxed font-light"
                     >
-                        Gorkha Academy offloads instruction to AI and returns mentorship to humans.
+                        Gorkhay Academy offloads instruction to AI and returns mentorship to humans.
                         We replace the lecture with the project, and the grade with the{' '}
                         <TypeWriter
                             words={['portfolio.', 'evidence.', 'future.']}

@@ -11,7 +11,7 @@ export const Logo = ({ className, showText = true, size = 'default' }) => {
 
     return (
         <div className={cn("flex items-center gap-3", className)}>
-            {/* Shield/Mountain Icon representing Gorkha */}
+            {/* Shield/Mountain Icon representing Gorkhay */}
             <motion.div
                 className={cn("relative flex items-center justify-center", sizes[size].icon)}
                 whileHover={{ scale: 1.05 }}
@@ -21,27 +21,27 @@ export const Logo = ({ className, showText = true, size = 'default' }) => {
                     {/* Mountain/Shield shape */}
                     <path
                         d="M20 4 L36 32 Q36 36 32 36 L8 36 Q4 36 4 32 L20 4Z"
-                        className="fill-blue-600"
+                        className="fill-white"
                     />
                     {/* Inner mountain peak */}
                     <path
                         d="M20 12 L28 28 L12 28 Z"
-                        className="fill-slate-900"
+                        className="fill-black"
                     />
                     {/* Snow cap / highlight */}
                     <path
                         d="M20 12 L23 18 L17 18 Z"
-                        className="fill-white/90"
+                        className="fill-white"
                     />
                 </svg>
             </motion.div>
 
             {showText && (
                 <div className="flex flex-col">
-                    <span className={cn("font-sans font-bold text-white tracking-tight leading-none", sizes[size].text)}>
-                        Gorkha
+                    <span className={cn("font-heading font-medium text-white tracking-widest leading-none uppercase", sizes[size].text)}>
+                        Gorkhay
                     </span>
-                    <span className="text-[10px] font-semibold text-blue-400 tracking-[0.2em] uppercase">
+                    <span className="text-[10px] font-medium text-slate-400 tracking-[0.4em] uppercase mt-1">
                         Academy
                     </span>
                 </div>

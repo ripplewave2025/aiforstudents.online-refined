@@ -9,11 +9,9 @@ import { Login } from './components/auth/Login';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { StudentDashboard } from './components/dashboards/StudentDashboard';
-import { TeacherDashboard } from './components/dashboards/TeacherDashboard';
-import { ParentDashboard } from './components/dashboards/ParentDashboard';
-
 import { ConceptIntro } from './components/landing/ConceptIntro';
 import { AnimatePresence, motion } from 'framer-motion';
+import { CosmicScene } from './components/backgrounds/CosmicScene';
 
 function App() {
   const [view, setView] = useState('landing');
@@ -32,7 +30,7 @@ function App() {
   if (view === 'login') return <Login onBack={() => setView('landing')} onLogin={handleLogin} />;
 
   return (
-    <div className="bg-slate-950 min-h-screen text-slate-100 font-sans selection:bg-blue-500/30 overflow-x-hidden">
+    <div className="min-h-screen text-slate-100 font-sans selection:bg-white selection:text-black overflow-x-hidden">
       <AnimatePresence mode="wait">
         {showIntro ? (
           <ConceptIntro key="intro" onResolved={() => setShowIntro(false)} />
@@ -42,17 +40,21 @@ function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
+            className="relative"
           >
-            <Navbar onLogin={() => setView('login')} />
-            <Hero onStart={() => setView('login')} />
-            <Problem />
-            <Shift />
-            <Cycle />
-            <div id="roles">
-              <Roles />
+            <CosmicScene />
+            <div className="relative z-10">
+              <Navbar onLogin={() => setView('login')} />
+              <Hero onStart={() => setView('login')} />
+              <Problem />
+              <Shift />
+              <Cycle />
+              <div id="roles">
+                <Roles />
+              </div>
+              <Philosophy />
+              <Footer />
             </div>
-            <Philosophy />
-            <Footer />
           </motion.div>
         )}
       </AnimatePresence>

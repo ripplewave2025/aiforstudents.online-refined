@@ -152,8 +152,8 @@ export const ConceptIntro = ({ onResolved }) => {
                             className="space-y-12"
                         >
                             <div className="space-y-4">
-                                <p className="text-slate-500 text-sm tracking-widest uppercase mb-4">A Quiet Realization</p>
-                                <h2 className="text-3xl md:text-4xl font-heading font-light leading-relaxed text-slate-100">
+                                <p className="text-zinc-500 text-xs tracking-[0.3em] uppercase mb-8">A Quiet Realization</p>
+                                <h2 className="text-3xl md:text-5xl font-heading font-light leading-tight text-white">
                                     <motion.span
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
@@ -174,7 +174,7 @@ export const ConceptIntro = ({ onResolved }) => {
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 2.5, duration: 1 }}
-                                        className="text-blue-400 font-medium"
+                                        className="text-white font-normal"
                                     >
                                         Guidance is human.
                                     </motion.span>
@@ -187,17 +187,17 @@ export const ConceptIntro = ({ onResolved }) => {
                                 transition={{ delay: 4, duration: 1 }}
                                 className="pt-8"
                             >
-                                <div className="w-px h-16 bg-gradient-to-b from-blue-500/50 to-transparent mx-auto" />
+                                <div className="w-px h-16 bg-gradient-to-b from-white/30 to-transparent mx-auto" />
                             </motion.div>
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* Subtle background text for "slightly unsettling" feel */}
+            {/* Subtle background text */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.02] flex items-center justify-center select-none overflow-hidden">
                 <span className="text-[20vw] font-bold text-white whitespace-nowrap">
-                    SYSTEM ERROR TRUTH AGENCY MASTERI
+                    MASTERY AGENCY HUMANITY
                 </span>
             </div>
         </div>
