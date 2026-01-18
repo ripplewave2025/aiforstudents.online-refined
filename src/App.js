@@ -12,8 +12,12 @@ import { StudentDashboard } from './components/dashboards/StudentDashboard';
 import { TeacherDashboard } from './components/dashboards/TeacherDashboard';
 import { ParentDashboard } from './components/dashboards/ParentDashboard';
 
+import { ConceptIntro } from './components/landing/ConceptIntro';
+import { AnimatePresence, motion } from 'framer-motion';
+
 function App() {
   const [view, setView] = useState('landing');
+  const [showIntro, setShowIntro] = useState(true);
 
   const handleLogin = (role) => {
     if (role === 'student') setView('student');
@@ -29,16 +33,29 @@ function App() {
 
   return (
     <div className="bg-slate-950 min-h-screen text-slate-100 font-sans selection:bg-blue-500/30 overflow-x-hidden">
-      <Navbar onLogin={() => setView('login')} />
-      <Hero onStart={() => setView('login')} />
-      <Problem />
-      <Shift />
-      <Cycle />
-      <div id="roles">
-        <Roles />
-      </div>
-      <Philosophy />
-      <Footer />
+      <AnimatePresence mode="wait">
+        {showIntro ? (
+          <ConceptIntro key="intro" onResolved={() => setShowIntro(false)} />
+        ) : (
+          <motion.div
+            key="site"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+          >
+            <Navbar onLogin={() => setView('login')} />
+            <Hero onStart={() => setView('login')} />
+            <Problem />
+            <Shift />
+            <Cycle />
+            <div id="roles">
+              <Roles />
+            </div>
+            <Philosophy />
+            <Footer />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
