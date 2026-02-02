@@ -14,9 +14,9 @@ export const Navbar = ({ onLogin }) => {
     }, []);
 
     const navItems = [
-        { label: 'Problem', href: '#problem' },
         { label: 'How It Works', href: '#how-it-works' },
-        { label: 'Roles', href: '#roles' },
+        { label: 'FAQs', href: '#faqs' },
+        { label: 'Contact', href: '#enquiry' },
     ];
 
     return (
@@ -26,8 +26,8 @@ export const Navbar = ({ onLogin }) => {
                 animate={{ y: 0 }}
                 transition={{ type: "spring", stiffness: 100, damping: 20 }}
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${scrolled
-                        ? 'bg-slate-950/90 backdrop-blur-xl border-slate-800 py-3'
-                        : 'bg-transparent border-transparent py-5'
+                    ? 'bg-slate-950/90 backdrop-blur-xl border-slate-800 py-3'
+                    : 'bg-transparent border-transparent py-5'
                     }`}
             >
                 <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
