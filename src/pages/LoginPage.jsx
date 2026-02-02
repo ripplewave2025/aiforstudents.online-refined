@@ -33,11 +33,11 @@ export const LoginPage = () => {
         setEmail(`demo@${role}`);
     };
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
 
-        const result = login(email, password, selectedRole);
+        const result = await login(email, password, selectedRole);
         if (result.success) {
             const routes = {
                 student: '/student',
