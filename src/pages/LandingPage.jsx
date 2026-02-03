@@ -728,7 +728,7 @@ const ContactSection = () => {
                 )}
 
                 <p className="text-center text-slate-500 text-sm mt-8">
-                    hello@aiforstudents.online
+                    <a href="mailto:contact@aiforstudents.online" className="hover:text-slate-300 transition-colors">contact@aiforstudents.online</a>
                 </p>
             </div>
         </section>
@@ -750,7 +750,7 @@ const Footer = () => (
             <div className="flex items-center gap-6 text-sm text-slate-500">
                 <a href="/privacy" className="hover:text-slate-300 transition-colors">Privacy</a>
                 <a href="/terms" className="hover:text-slate-300 transition-colors">Terms</a>
-                <a href="mailto:hello@aiforstudents.online" className="hover:text-slate-300 transition-colors">Contact</a>
+                <a href="mailto:contact@aiforstudents.online" className="hover:text-slate-300 transition-colors">Contact</a>
             </div>
         </div>
     </footer>
