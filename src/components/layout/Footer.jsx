@@ -49,7 +49,11 @@ export const Footer = () => {
                 </div>
 
                 <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-600 font-light tracking-wider">
-                    <p>© 2026 Gorkhay Academy. All rights reserved.</p>
+                    <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                        <p>© 2026 Explora. All rights reserved.</p>
+                        <span className="hidden md:inline text-zinc-700">•</span>
+                        <p className="text-zinc-500">Created with ❤️ in Lamahatta, Darjeeling, West Bengal</p>
+                    </div>
                     <div className="flex gap-6">
                         <a href="#top" className="hover:text-white transition-colors">Privacy</a>
                         <a href="#top" className="hover:text-white transition-colors">Terms</a>
