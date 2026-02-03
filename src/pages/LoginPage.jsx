@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
-import { GraduationCap, User, Users, Shield, ArrowRight, ChevronLeft } from 'lucide-react';
+import { GraduationCap, User, Users, Shield, ArrowRight, ChevronLeft, Sparkles } from 'lucide-react';
 
 const RoleCard = ({ icon: Icon, title, description, color, onClick }) => (
     <motion.button
@@ -43,7 +43,8 @@ export const LoginPage = () => {
                 student: '/student',
                 teacher: '/teacher',
                 parent: '/parent',
-                admin: '/admin'
+                admin: '/admin',
+                creator: '/creator'
             };
             navigate(routes[selectedRole] || '/');
         } else {
@@ -108,6 +109,13 @@ export const LoginPage = () => {
                                 description="View school-wide metrics and manage the system."
                                 color="bg-amber-950/30 border-amber-500/50 text-amber-300 hover:bg-amber-950/50"
                                 onClick={() => handleRoleSelect('admin')}
+                            />
+                            <RoleCard
+                                icon={Sparkles}
+                                title="I'm a Creator"
+                                description="Build and share educational content with students worldwide."
+                                color="bg-orange-950/30 border-orange-500/50 text-orange-300 hover:bg-orange-950/50"
+                                onClick={() => handleRoleSelect('creator')}
                             />
                         </div>
                     </div>

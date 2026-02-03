@@ -19,6 +19,10 @@ const MOCK_USERS = {
     ],
     admins: [
         { id: 'a1', name: 'Principal Rinchen', email: 'admin@school.edu', role: 'admin' },
+    ],
+    creators: [
+        { id: 'c1', name: 'Ms. Priya Sharma', email: 'creator@school.edu', role: 'creator', expertise: ['Mathematics', 'Science'], bio: 'Passionate educator with 10 years of experience' },
+        { id: 'c2', name: 'Mr. Rajesh Kumar', email: 'rajesh.creator@school.edu', role: 'creator', expertise: ['English', 'Social Studies'], bio: 'Making learning fun and engaging' },
     ]
 };
 
@@ -104,6 +108,8 @@ export const AuthProvider = ({ children }) => {
             foundUser = MOCK_USERS.parents.find(u => u.email === email);
         } else if (role === 'admin') {
             foundUser = MOCK_USERS.admins.find(u => u.email === email);
+        } else if (role === 'creator') {
+            foundUser = MOCK_USERS.creators.find(u => u.email === email);
         }
 
         // Allow demo login with any email containing the role
@@ -114,7 +120,8 @@ export const AuthProvider = ({ children }) => {
                 email,
                 role,
                 class: role === 'student' ? '8A' : undefined,
-                classes: role === 'teacher' ? ['8A'] : undefined
+                classes: role === 'teacher' ? ['8A'] : undefined,
+                expertise: role === 'creator' ? ['General'] : undefined
             };
         }
 
@@ -187,6 +194,7 @@ export const AuthProvider = ({ children }) => {
         isTeacher: (profile || user)?.role === 'teacher',
         isParent: (profile || user)?.role === 'parent',
         isAdmin: (profile || user)?.role === 'admin',
+        isCreator: (profile || user)?.role === 'creator',
         isOnline,
         isSupabaseConfigured
     };

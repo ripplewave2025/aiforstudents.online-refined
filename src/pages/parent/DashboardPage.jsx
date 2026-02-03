@@ -11,8 +11,10 @@ import {
     MessageCircle,
     Calendar,
     Compass,
-    RefreshCw
+    RefreshCw,
+    Target
 } from 'lucide-react';
+import { CharacterMetrics } from '../../components/dashboards/CharacterMetrics';
 
 // Mock linked student data - reframed for growth, not scores
 const MOCK_STUDENT = {
@@ -173,6 +175,7 @@ export const ParentDashboardPage = () => {
             >
                 {[
                     { id: 'overview', label: 'My Child', icon: User },
+                    { id: 'character', label: 'Character', icon: Target },
                     { id: 'tips', label: 'Parenting Tips', icon: Lightbulb },
                     { id: 'techniques', label: 'How to Help', icon: ThumbsUp },
                 ].map(tab => (
@@ -301,6 +304,16 @@ export const ParentDashboardPage = () => {
                             ))}
                         </div>
                     </div>
+                </motion.div>
+            )}
+
+            {/* Character Assessment Tab */}
+            {activeTab === 'character' && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                >
+                    <CharacterMetrics studentName={student.name} />
                 </motion.div>
             )}
 

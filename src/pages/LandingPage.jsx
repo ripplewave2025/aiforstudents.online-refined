@@ -67,8 +67,8 @@ const Navigation = ({ onLogin, darkMode, setDarkMode }) => {
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-                        ? 'bg-slate-950/95 backdrop-blur-xl border-b border-slate-800/50 py-3'
-                        : 'bg-transparent py-5'
+                    ? 'bg-slate-950/95 backdrop-blur-xl border-b border-slate-800/50 py-3'
+                    : 'bg-transparent py-5'
                     }`}
             >
                 <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
@@ -366,6 +366,14 @@ const RolesSection = ({ onLogin }) => {
             cta: 'Partner →',
             color: 'from-amber-500 to-amber-600',
             action: () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+        },
+        {
+            icon: Sparkles,
+            title: 'Content Creators',
+            lines: ['Build engaging lessons.', 'Share your expertise globally.'],
+            cta: 'Become a Creator',
+            color: 'from-orange-500 to-orange-600',
+            action: onLogin
         },
     ];
 
@@ -681,6 +689,7 @@ const ContactSection = () => {
                                 >
                                     <option value="school">School Administrator</option>
                                     <option value="teacher">Teacher</option>
+                                    <option value="creator">Content Creator</option>
                                     <option value="parent">Parent</option>
                                     <option value="vocational">Vocational Partner</option>
                                     <option value="other">Other</option>

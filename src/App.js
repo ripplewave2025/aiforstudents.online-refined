@@ -36,6 +36,11 @@ import { ParentSummariesPage } from './pages/admin/ParentSummariesPage';
 import { ParentDashboardPage } from './pages/parent/DashboardPage';
 import { ParentResourcesPage } from './pages/parent/ResourcesPage';
 
+// Creator Pages
+import { CreatorDashboardPage } from './pages/creator/DashboardPage';
+import { ContentStudioPage } from './pages/creator/ContentStudioPage';
+import { MyContentPage } from './pages/creator/MyContentPage';
+
 // Protected Route wrapper
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -161,6 +166,23 @@ function AppRoutes() {
       <Route path="/admin/parents" element={
         <ProtectedRoute allowedRoles={['admin']}>
           <AppLayout><ParentSummariesPage /></AppLayout>
+        </ProtectedRoute>
+      } />
+
+      {/* Creator Routes */}
+      <Route path="/creator" element={
+        <ProtectedRoute allowedRoles={['creator']}>
+          <AppLayout><CreatorDashboardPage /></AppLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/creator/studio" element={
+        <ProtectedRoute allowedRoles={['creator']}>
+          <AppLayout><ContentStudioPage /></AppLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/creator/content" element={
+        <ProtectedRoute allowedRoles={['creator']}>
+          <AppLayout><MyContentPage /></AppLayout>
         </ProtectedRoute>
       } />
 
