@@ -1,54 +1,4 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { ThinkingProvider } from './contexts/ThinkingContext';
 
-// Layout
-import { AppLayout } from './components/layout/AppLayout';
-
-// Public Pages
-import { LoginPage } from './pages/LoginPage';
-import { LandingPage } from './pages/LandingPage';
-
-// Student Pages
-import { StudentDashboardPage } from './pages/student/DashboardPage';
-import { ReasoningLogPage } from './pages/student/ReasoningLogPage';
-import { ThinkingWorkspacePage } from './pages/student/ThinkingWorkspacePage';
-import { SpeakingPracticePage } from './pages/student/SpeakingPracticePage';
-import { MyProgressPage } from './pages/student/MyProgressPage';
-import { CuriosityMapPage } from './pages/student/CuriosityMapPage';
-import { ArtifactBuilderPage } from './pages/student/ArtifactBuilderPage';
-import { ReflectionLogPage } from './pages/student/ReflectionLogPage';
-import { MyVisionPage } from './pages/student/MyVisionPage';
-
-// Teacher Pages
-import { TeacherDashboardPage } from './pages/teacher/DashboardPage';
-import { ClassInsightsPage } from './pages/teacher/ClassInsightsPage';
-import { ArtifactReviewPage } from './pages/teacher/ArtifactReviewPage';
-import { TeacherPlanPage } from './pages/teacher/PlanPage';
-
-// Admin Pages
-import { AdminDashboardPage } from './pages/admin/DashboardPage';
-import { ReportsPage } from './pages/admin/ReportsPage';
-import { ParentSummariesPage } from './pages/admin/ParentSummariesPage';
-
-// Parent Pages
-import { ParentDashboardPage } from './pages/parent/DashboardPage';
-import { ParentResourcesPage } from './pages/parent/ResourcesPage';
-
-// Creator Pages
-import { CreatorDashboardPage } from './pages/creator/DashboardPage';
-import { ContentStudioPage } from './pages/creator/ContentStudioPage';
-import { MyContentPage } from './pages/creator/MyContentPage';
-
-// Protected Route wrapper
-const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { user, isAuthenticated, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-white">Loading...</div>
       </div>
     );
   }
@@ -194,13 +144,7 @@ function AppRoutes() {
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <ThinkingProvider>
-          <AppRoutes />
-        </ThinkingProvider>
-      </AuthProvider>
-    </Router>
+
   );
 }
 
