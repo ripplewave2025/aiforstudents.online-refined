@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useThinking } from '../../contexts/ThinkingContext';
 import {
     Brain,
@@ -13,7 +13,9 @@ import {
     Lightbulb,
     Send,
     Loader2,
-    RefreshCw
+    RefreshCw,
+    User,
+    Sparkles
 } from 'lucide-react';
 
 const PromptCard = ({ icon: Icon, title, hint, color }) => (
@@ -26,11 +28,42 @@ const PromptCard = ({ icon: Icon, title, hint, color }) => (
     </div>
 );
 
+const ChatMessage = ({ role, text, isLatest }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={`flex gap-3 ${role === 'user' ? 'justify-end' : 'justify-start'}`}
+    >
+        {role === 'ai' && (
+            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-4 h-4 text-emerald-400" />
+            </div>
+        )}
+
+        <div className={`max-w-[80%] rounded-2xl p-4 text-sm ${
+            role === 'user'
+                ? 'bg-teal-600 text-white rounded-tr-none'
+                : 'bg-slate-800 text-slate-200 rounded-tl-none border border-slate-700'
+        }`}>
+            <p className="whitespace-pre-line">{text}</p>
+        </div>
+
+        {role === 'user' && (
+            <div className="w-8 h-8 rounded-full bg-teal-600/20 flex items-center justify-center flex-shrink-0">
+                <User className="w-4 h-4 text-teal-400" />
+            </div>
+        )}
+    </motion.div>
+);
+
 export const ThinkingWorkspacePage = () => {
     const {
         currentSession,
         aiGateUnlocked,
+        aiMode, // 'socratic' | 'standard'
         recordAIResponse,
+        generateSocraticQuestion,
+        addToSocraticDialogue,
         addEvidenceNote,
         addCounterArgument,
         updateSession
@@ -41,12 +74,47 @@ export const ThinkingWorkspacePage = () => {
     const [aiLoading, setAiLoading] = useState(false);
     const [newEvidence, setNewEvidence] = useState('');
     const [newCounter, setNewCounter] = useState('');
+    const [struggleDetected, setStruggleDetected] = useState(false);
+    const [lastActivity, setLastActivity] = useState(Date.now());
 
-    // Simulate AI response (MVP - no real API)
-    const handleAskAI = async () => {
+    // Struggle Detection
+    useEffect(() => {
+        if (!currentSession || aiGateUnlocked) return;
+
+        const checkInactivity = setInterval(() => {
+            const timeSinceActivity = Date.now() - lastActivity;
+            if (timeSinceActivity > 30000 && !struggleDetected) { // 30 seconds
+                setStruggleDetected(true);
+            }
+        }, 5000);
+
+        return () => clearInterval(checkInactivity);
+    }, [lastActivity, currentSession, aiGateUnlocked, struggleDetected]);
+
+    const handleActivity = () => {
+        setLastActivity(Date.now());
+        if (struggleDetected) setStruggleDetected(false);
+    };
+
+    // Initialize Socratic Dialogue if empty
+    useEffect(() => {
+        if (aiGateUnlocked && aiMode === 'socratic' && (!currentSession?.socraticDialogue || currentSession.socraticDialogue.length === 0)) {
+            const initDialogue = async () => {
+                setAiLoading(true);
+                const question = await generateSocraticQuestion(`I believe ${currentSession.initialBelief}`);
+                addToSocraticDialogue('ai', question);
+                setAiLoading(false);
+            };
+            initDialogue();
+        }
+    }, [aiGateUnlocked, aiMode, currentSession?.socraticDialogue, currentSession?.initialBelief, generateSocraticQuestion, addToSocraticDialogue]);
+
+    // Handle standard AI response (MVP)
+    const handleAskStandardAI = async () => {
         if (!aiPrompt.trim()) return;
-
         setAiLoading(true);
+        handleActivity();
+
         // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 1500));
 
@@ -70,9 +138,36 @@ Remember: The goal isn't to get the "right" answer, but to think more clearly ab
         setAiLoading(false);
     };
 
+    // Handle Socratic Dialogue
+    const handleSocraticInteraction = async () => {
+        if (!aiPrompt.trim()) return;
+
+        handleActivity();
+        const userMsg = aiPrompt;
+        setAiPrompt('');
+
+        // Add user message
+        addToSocraticDialogue('user', userMsg);
+
+        // Generate AI response
+        setAiLoading(true);
+        const aiQuestion = await generateSocraticQuestion(userMsg);
+        addToSocraticDialogue('ai', aiQuestion);
+        setAiLoading(false);
+    };
+
+    const handleSend = () => {
+        if (aiMode === 'socratic') {
+            handleSocraticInteraction();
+        } else {
+            handleAskStandardAI();
+        }
+    };
+
     // Add evidence
     const handleAddEvidence = (isSupporting) => {
         if (!newEvidence.trim()) return;
+        handleActivity();
         addEvidenceNote(newEvidence.trim(), isSupporting);
         setNewEvidence('');
     };
@@ -80,12 +175,14 @@ Remember: The goal isn't to get the "right" answer, but to think more clearly ab
     // Add counter-argument
     const handleAddCounter = () => {
         if (!newCounter.trim()) return;
+        handleActivity();
         addCounterArgument(newCounter.trim());
         setNewCounter('');
     };
 
     // Update critique
     const handleCritiqueChange = (text) => {
+        handleActivity();
         setCritique(text);
         updateSession({ critique: text });
     };
@@ -133,9 +230,34 @@ Remember: The goal isn't to get the "right" answer, but to think more clearly ab
                 <p className="text-sm text-slate-300 mb-4">{currentSession.question}</p>
                 <div className="flex flex-wrap gap-4 text-xs text-slate-400">
                     <span><strong>Your belief:</strong> {currentSession.initialBelief?.substring(0, 100)}...</span>
-                    <span><strong>Confidence:</strong> {currentSession.beliefConfidence}%</span>
                 </div>
             </motion.div>
+
+            {/* Struggle Detection Prompt */}
+            <AnimatePresence>
+                {struggleDetected && !aiGateUnlocked && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mb-6 bg-indigo-900/30 border border-indigo-500/30 rounded-xl p-4 flex items-center gap-4"
+                    >
+                        <div className="p-2 bg-indigo-500/20 rounded-full">
+                            <Lightbulb className="w-5 h-5 text-indigo-400" />
+                        </div>
+                        <div className="flex-1">
+                            <h4 className="font-bold text-sm text-indigo-300">Feeling stuck?</h4>
+                            <p className="text-xs text-slate-400">Try looking at the problem from the opposite perspective. What would someone who disagrees with you say?</p>
+                        </div>
+                        <button
+                            onClick={() => setStruggleDetected(false)}
+                            className="px-3 py-1.5 text-xs bg-indigo-600/20 text-indigo-300 rounded-lg hover:bg-indigo-600/30 transition-colors"
+                        >
+                            Thanks, got it
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Critical Thinking Prompts */}
             <motion.div
@@ -292,13 +414,13 @@ Remember: The goal isn't to get the "right" answer, but to think more clearly ab
                     transition={{ delay: 0.4 }}
                     className="space-y-6"
                 >
-                    <div className={`rounded-2xl p-6 ${aiGateUnlocked
-                            ? 'bg-emerald-950/20 border-2 border-emerald-500/30'
+                    <div className={`rounded-2xl p-6 h-full flex flex-col ${aiGateUnlocked
+                            ? 'bg-emerald-950/10 border-2 border-emerald-500/30'
                             : 'bg-slate-800/30 border-2 border-slate-700'
                         }`}>
                         <h3 className="font-bold mb-4 flex items-center gap-2">
-                            <Lightbulb className={`w-5 h-5 ${aiGateUnlocked ? 'text-emerald-400' : 'text-slate-500'}`} />
-                            AI Exploration
+                            {aiMode === 'socratic' ? <MessageSquare className="w-5 h-5 text-emerald-400" /> : <Lightbulb className="w-5 h-5 text-yellow-400" />}
+                            {aiMode === 'socratic' ? 'Socratic Mentor' : 'AI Exploration'}
                             {aiGateUnlocked && (
                                 <span className="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-full">
                                     Unlocked
@@ -307,72 +429,70 @@ Remember: The goal isn't to get the "right" answer, but to think more clearly ab
                         </h3>
 
                         {!aiGateUnlocked ? (
-                            <div className="text-center py-8 text-slate-400">
+                            <div className="text-center py-8 text-slate-400 my-auto">
                                 <p className="mb-2">AI is locked</p>
                                 <p className="text-sm">Complete your reasoning log to unlock AI assistance.</p>
                             </div>
                         ) : (
                             <>
-                                {/* AI Response Display */}
-                                {currentSession.aiResponse && (
-                                    <div className="bg-slate-800/50 rounded-xl p-4 mb-4 text-sm">
-                                        <p className="text-xs text-slate-500 mb-2">
-                                            You asked: "{currentSession.aiResponse.prompt}"
-                                        </p>
-                                        <p className="text-slate-300 whitespace-pre-line">
-                                            {currentSession.aiResponse.response}
-                                        </p>
-                                    </div>
-                                )}
+                                {/* Chat Area */}
+                                <div className="flex-1 overflow-y-auto space-y-4 mb-4 min-h-[300px] max-h-[500px] pr-2">
+                                    {aiMode === 'socratic' ? (
+                                        // Socratic Mode: Chat History
+                                        currentSession.socraticDialogue?.map((msg, i) => (
+                                            <ChatMessage key={i} role={msg.role} text={msg.text} isLatest={i === currentSession.socraticDialogue.length - 1} />
+                                        ))
+                                    ) : (
+                                        // Standard Mode: Single Response
+                                        currentSession.aiResponse && (
+                                            <div className="bg-slate-800/50 rounded-xl p-4 mb-4 text-sm">
+                                                <p className="text-xs text-slate-500 mb-2">
+                                                    You asked: "{currentSession.aiResponse.prompt}"
+                                                </p>
+                                                <p className="text-slate-300 whitespace-pre-line">
+                                                    {currentSession.aiResponse.response}
+                                                </p>
+                                            </div>
+                                        )
+                                    )}
+                                    {aiLoading && (
+                                        <div className="flex gap-2 items-center text-slate-400 text-sm p-4">
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            AI is thinking...
+                                        </div>
+                                    )}
+                                </div>
 
                                 {/* AI Input */}
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 mt-auto">
                                     <input
                                         type="text"
                                         value={aiPrompt}
-                                        onChange={(e) => setAiPrompt(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleAskAI()}
-                                        placeholder="Ask AI to help explore your question..."
+                                        onChange={(e) => {
+                                            setAiPrompt(e.target.value);
+                                            handleActivity();
+                                        }}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                                        placeholder={aiMode === 'socratic' ? "Reply to the mentor..." : "Ask AI to help explore..."}
                                         className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-emerald-500 transition-colors"
                                         disabled={aiLoading}
                                     />
                                     <button
-                                        onClick={handleAskAI}
+                                        onClick={handleSend}
                                         disabled={aiLoading || !aiPrompt.trim()}
                                         className="px-4 py-3 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-700 disabled:text-slate-400 rounded-xl transition-colors"
                                     >
-                                        {aiLoading ? (
-                                            <Loader2 className="w-5 h-5 animate-spin" />
-                                        ) : (
-                                            <Send className="w-5 h-5" />
-                                        )}
+                                        <Send className="w-5 h-5" />
                                     </button>
                                 </div>
 
                                 <p className="text-xs text-slate-500 mt-3">
-                                    Remember: AI is a tool for exploration, not a source of truth.
+                                    {aiMode === 'socratic'
+                                        ? "The mentor asks questions to help you clarify your own thinking."
+                                        : "Remember: AI is a tool for exploration, not a source of truth."}
                                 </p>
                             </>
                         )}
-                    </div>
-
-                    {/* Assumptions Review */}
-                    <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
-                        <h3 className="font-bold mb-4 flex items-center gap-2">
-                            <AlertTriangle className="w-5 h-5 text-amber-400" />
-                            Your Assumptions
-                        </h3>
-                        <div className="space-y-2">
-                            {currentSession.assumptions?.map((assumption, i) => (
-                                <div key={i} className="p-3 bg-amber-950/30 border border-amber-500/30 rounded-lg text-sm">
-                                    <span className="text-amber-400 font-mono mr-2">{i + 1}.</span>
-                                    {assumption}
-                                </div>
-                            ))}
-                        </div>
-                        <p className="text-xs text-slate-500 mt-4">
-                            Which of these assumptions might be wrong?
-                        </p>
                     </div>
                 </motion.div>
             </div>

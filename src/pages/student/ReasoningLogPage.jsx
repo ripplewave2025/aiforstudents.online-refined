@@ -13,7 +13,8 @@ import {
     X,
     CheckCircle2,
     Sparkles,
-    Brain
+    Brain,
+    MessageSquare
 } from 'lucide-react';
 
 const StepIndicator = ({ number, title, complete, active }) => (
@@ -32,9 +33,9 @@ export const ReasoningLogPage = () => {
         currentSession,
         startSession,
         updateSession,
-        canUnlockAIGate,
         unlockAIGate,
-        aiGateUnlocked
+        aiMode,
+        setAiMode
     } = useThinking();
 
     const [step, setStep] = useState(currentSession ? 2 : 1);
@@ -88,6 +89,11 @@ export const ReasoningLogPage = () => {
         }
     };
 
+    // Toggle AI Mode (for testing)
+    const toggleAiMode = () => {
+        setAiMode(prev => prev === 'socratic' ? 'standard' : 'socratic');
+    };
+
     // Learning Vector Model: Only question + initial thought required
     const isComplete = question && initialBelief;
 
@@ -97,14 +103,24 @@ export const ReasoningLogPage = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-8"
+                className="mb-8 flex justify-between items-start"
             >
-                <h1 className="text-2xl md:text-3xl font-bold mb-2">
-                    Question Log
-                </h1>
-                <p className="text-slate-400">
-                    Start with curiosity. What are you wondering about?
-                </p>
+                <div>
+                    <h1 className="text-2xl md:text-3xl font-bold mb-2">
+                        Question Log
+                    </h1>
+                    <p className="text-slate-400">
+                        Start with curiosity. What are you wondering about?
+                    </p>
+                </div>
+
+                {/* Admin/Teacher Toggle for Socratic Mode */}
+                <button
+                    onClick={toggleAiMode}
+                    className="text-xs px-3 py-1 rounded-full bg-slate-800 text-slate-500 hover:text-white transition-colors"
+                >
+                    Mode: {aiMode === 'socratic' ? 'Socratic Mentor' : 'Standard AI'}
+                </button>
             </motion.div>
 
             {/* Progress Steps */}
@@ -379,18 +395,24 @@ export const ReasoningLogPage = () => {
                                 <div className={`p-4 rounded-xl ${isComplete ? 'bg-emerald-500/20' : 'bg-slate-700'
                                     }`}>
                                     {isComplete ? (
-                                        <Unlock className="w-8 h-8 text-emerald-400" />
+                                        aiMode === 'socratic' ?
+                                            <MessageSquare className="w-8 h-8 text-emerald-400" /> :
+                                            <Unlock className="w-8 h-8 text-emerald-400" />
                                     ) : (
                                         <Lock className="w-8 h-8 text-slate-400" />
                                     )}
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-lg font-bold">
-                                        {isComplete ? 'AI Gate Ready!' : 'AI Gate Locked'}
+                                        {isComplete
+                                            ? (aiMode === 'socratic' ? 'Start Socratic Dialogue' : 'AI Gate Ready!')
+                                            : 'AI Gate Locked'}
                                     </h3>
                                     <p className="text-sm text-slate-400">
                                         {isComplete
-                                            ? 'Your curiosity is ready. Explore further with AI.'
+                                            ? (aiMode === 'socratic'
+                                                ? 'Your curiosity is ready. Discuss your thinking with the AI Mentor.'
+                                                : 'Your curiosity is ready. Explore further with AI.')
                                             : `Share your question and initial thought to continue.`}
                                     </p>
                                 </div>
@@ -403,7 +425,7 @@ export const ReasoningLogPage = () => {
                                         }`}
                                 >
                                     <Brain className="w-5 h-5" />
-                                    Unlock AI
+                                    {aiMode === 'socratic' ? 'Begin Dialogue' : 'Unlock AI'}
                                 </button>
                             </div>
                         </motion.div>
