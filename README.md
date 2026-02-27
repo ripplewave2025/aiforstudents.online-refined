@@ -1,84 +1,144 @@
-# AI For Students: The Cognitive Matrix Interface (CMI)
+# Gorkha Academy
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![Status](https://img.shields.io/badge/status-active_development-orange)
+> From passive consumption to active mastery.
 
-[aiforstudents.online](https://aiforstudents.online) is not just a study tool. It is a Cognitive Operating System designed to bridge the gap between the industrial "Factory Model" of schooling and the "Apprenticeship Model" of the future. We are building the interface that solves Bloom's 2 Sigma Problem at scale.
+Gorkha Academy offloads instruction to AI and returns mentorship to humans. We replace the lecture with the project, and the grade with the portfolio.
 
-## 🏗 The Motive: Why We Built This
+---
 
-The current educational architecture is obsolete. Designed in the 19th century, the "Factory Model" processes students in batches based on age, not ability. It prioritizes compliance (obedience, rote memorization, bell schedules) over competence (mastery, problem-solving, agency).
+## Core Vision
 
-Research validates that this system is failing:
+### The Problem
 
-- **The Hidden Curriculum**: Schools implicitly teach dependency and indifference, conditioning students to wait for instructions rather than take initiative [Gatto, 1992].
-- **The Predictive Failure**: Meta-analyses by Schmidt & Hunter (1998) and internal data from Google (Laszlo Bock) prove that GPA and test scores have almost zero correlation with professional success.
-- **The Engagement Cliff**: Gallup data shows student engagement drops from 74% in elementary school to 34% by high school. The longer you stay in the factory, the less you care.
+Traditional education spends human energy on the one thing technology does better: **content delivery**.
 
-## The Mission
+- Teachers are exhausted by repetition—delivering the same lecture year after year, while grading the same drills
+- Students are bored by passivity—sitting in silence, memorizing what can be searched, missing the deeper skills
+- Graduation arrives without a map or portfolio—students leave with grades but no evidence of what they can actually build
 
-To transition learners from Passive Students (Factory Model) to Active Masters (Apprenticeship Model) using AI as the scalable mentor.
+*Time is spent memorizing what can be searched, while the ability to apply, explain, and navigate the world is left to chance.*
 
-## 🧠 Theoretical Framework & Architecture
+---
 
-This platform is built on three core pedagogical pillars derived from educational research:
+### The Shift
 
-### 1. The 2 Sigma Core (Solving the Scalability Problem)
+We use AI to handle the mechanics of learning—so humans can focus on what requires a soul.
 
-In 1984, Benjamin Bloom proved that average students who received 1-on-1 tutoring performed 2 standard deviations (2 sigma) better than students in a traditional classroom. That is the difference between an average C-student and a top 1% performer.
+| Role | Responsibility |
+|------|---------------|
+| **AI** | Handles the "What" — knowledge delivery, adaptive testing, instant feedback |
+| **Students** | Handle the "How" — teaching back, building projects, leading peers |
+| **Teachers** | Handle the "Where" — mentorship, career paths, system literacy |
 
-**The Constraint**: Society could never afford a human tutor for every child.
+---
 
-**Our Solution**: We use LLM-driven AI Agents to provide 24/7, 1-on-1 tutoring, replicating the feedback loops of a human expert at zero marginal cost.
+### How It Works
 
-### 2. The Digital Twin of the Student (DTS)
+A four-part cycle for lasting mastery:
 
-We do not treat users as static database entries. We model a Digital Twin ($DTS_i$) for every learner, consisting of evolving vectors:
+#### 1. Information Intake
+Students engage with high-density, AI-delivered modules. Interactive, adaptive, and available at any time. The AI ensures core understanding before moving forward.
 
-- $C_i$ (Competency Vector): A real-time map of what you can do, not just what you've read.
-- $L_i$ (Learning Style): The system adapts content format (visual, text, Socratic dialogue) based on your interaction patterns.
-- $E_i$ (Engagement State): Monitoring cognitive load to keep you in the "Flow State," preventing burnout or boredom.
+#### 2. The Reverse Lecture
+To prove mastery, students explain the concept back to the system and peers. **If you cannot teach it, you do not know it.** This builds confidence and deep clarity.
 
-### 3. Cognitive Apprenticeship
+#### 3. Project Application
+Knowledge is immediately applied to a "Build." Whether software, policy, or prototype—students create artifacts, not just notes.
 
-Traditional schools hide the thinking process. We use the Collins-Brown-Newman model of Cognitive Apprenticeship to make thinking visible.
+#### 4. Human Navigation
+Teachers review the work, not the tests. They act as project managers and career navigators, bridging interests to real-world opportunities.
 
-- **Modeling**: The AI demonstrates the process of solving a problem, not just the answer.
-- **Scaffolding**: The AI provides heavy support initially.
-- **Fading**: The AI gradually removes support as your Competency Vector ($C_i$) increases, forcing independence.
+---
 
-## ⚡ Key Features
+## Roles
 
-| Feature | Research Basis | Function |
-|---------|----------------|----------|
-| Algorithmic Mastery | Bloom (1984) | Variable Time, Fixed Learning. You cannot proceed until you achieve 90% mastery. No "Swiss Cheese" gaps in knowledge. |
-| The Skill Tree | Gamification Theory | Visualizes the Knowledge Graph. Shows dependencies (e.g., you can't unlock "React" until you master "JavaScript"). |
-| Agentic Tutors | Freeman et al. (2014) | Active Learning. The AI doesn't lecture; it quizzes, challenges, and debates you (Socratic Method). |
-| Work Sample Verification | Schmidt & Hunter (1998) | We prioritize Portfolios over Grades. The platform verifies output (code, essays, designs) rather than input. |
+### For Teachers
+*From Lecturer to Mentor*
 
-## 🤖 The AI Stack (Agent Orchestration)
+The modern teacher is often a delivery mechanism for a curriculum someone else wrote. Gorkha Academy changes that.
 
-The backend utilizes a multi-agent architecture to manage the learner's journey:
+**Your New Role:**
+- **Project Guide** — Manage the quality and execution of student builds
+- **System Navigator** — Teach students how to apply for grants, navigate university systems, and understand professional fields
+- **Portfolio Manager** — Help students curate their best work into a professional presence
+- **Mentor** — Provide the emotional and intellectual guidance that an algorithm cannot
 
-- **The Strategist**: Analyzes your long-term goals (e.g., "Become a Data Scientist") and gaps in your Competency Vector to generate a curriculum.
-- **The Designer**: Generates dynamic lessons, quizzes, and projects tailored to your current level.
-- **The Coach**: The user-facing interface. It provides emotional support, motivation, and immediate feedback on errors.
+Because AI handles the grading of drills and the repetition of lectures, you are no longer a content repeater. You are a high-level strategist for your students' lives.
 
-## 🔮 Roadmap: Vision 2035
+### For Students
+*You are the lead, not the audience.*
 
-- **Phase 1 (Current)**: Web-based AI Tutor with Mastery Learning tracking.
-- **Phase 2 (2026)**: Microschool Integration. Tools for pods of 5-10 students to learn together physically while the AI handles instruction.
-- **Phase 3 (2028)**: Blockchain Credentials. Integration with the Comprehensive Learner Record (CLR) standard. Your skills are minted as verifiable, portable assets on-chain, replacing the PDF transcript.
-- **Phase 4 (2035)**: Direct Interface. Integration with non-invasive BCI (Brain-Computer Interface) for real-time cognitive load adjustment.
+At Gorkha Academy, you don't sit and listen. You learn, you explain, and you build.
 
-## 📚 References & Research
+**The Reverse Lecture**
+Your assessment isn't a silent exam. You lead sessions, record briefings, and prove knowledge by teaching others. This is how leaders are made.
 
-- Bloom, B. S. (1984). "The 2 Sigma Problem: The Search for Methods of Group Instruction as Effective as One-to-One Tutoring."
-- Gatto, J. T. (1992). *Dumbing Us Down: The Hidden Curriculum of Compulsory Schooling*.
-- Freeman, S., et al. (2014). "Active learning increases student performance in science, engineering, and mathematics." *PNAS*.
-- Schmidt, F. L., & Hunter, J. E. (1998). "The validity and utility of selection methods in personnel psychology."
+**Build Your Future**
+Every module ends in an artifact:
+- Instead of a history test → A research grant proposal
+- Instead of a math quiz → A functional financial model
+- Instead of a science exam → A documented experiment or prototype
 
-## 🚀 Join the Matrix
+**Career Access**
+From day one, learn how to find scholarships, write professional communications, and understand industries.
 
-Education is no longer about compliance. It's about sovereignty.
+### For Parents
+*A partnership, not a black box.*
 
-[Launch App](https://aiforstudents.online) | [Contribute](https://github.com/ripplewave2025/aiforstudents.online-refined)
+We believe parents should be informed supporters of their child's progress, not enforcers of homework.
+
+- **Clear Visibility** — See exactly what they're building, struggling with, and how their portfolio grows in real-time
+- **System Literacy** — Teaching them how the world actually works—applications, finance, grants
+- **Tangible Proof** — A digital portfolio that speaks louder than a GPA
+
+---
+
+## Philosophy
+
+> We believe that human time is the most valuable resource in the educational system. To waste it on tasks that can be automated is a systemic failure.
+
+> We believe that true understanding is a byproduct of teaching. If a student can explain a concept simply, they have mastered it.
+
+> We believe that the end goal of education is not a grade, but agency—the ability to look at a complex system and know exactly how to navigate it.
+
+**Gorkha Academy is a quiet return to the apprenticeship model, powered by modern intelligence.**
+
+- We provide the **tools**
+- The students provide the **work**
+- The teachers provide the **direction**
+
+---
+
+## Tech Stack
+
+- **Frontend**: React 18
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+
+## Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+
+# Build for production
+npm run build
+```
+
+## Contributing
+
+We welcome contributions! Please read our contributing guidelines before submitting a pull request.
+
+---
+
+## License
+
+© 2026 Gorkha Academy. All rights reserved.
+
+---
+
+*"A quiet, serious alternative to broken education — built for long-term trust."*
