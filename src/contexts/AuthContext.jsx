@@ -1,217 +1,227 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { supabase, isSupabaseConfigured, db } from '../lib/supabase';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { db, isSupabaseConfigured, supabase } from '../lib/supabase';
 
 const AuthContext = createContext(null);
 
-// Mock users for offline/demo mode
 const MOCK_USERS = {
-    students: [
-        { id: 's1', name: 'Tenzin Dorji', email: 'tenzin@school.edu', role: 'student', class: '8A' },
-        { id: 's2', name: 'Pemba Sherpa', email: 'pemba@school.edu', role: 'student', class: '8A' },
-        { id: 's3', name: 'Karma Lhamu', email: 'karma@school.edu', role: 'student', class: '8A' },
-    ],
-    teachers: [
-        { id: 't1', name: 'Dr. Sonam Bhutia', email: 'sonam@school.edu', role: 'teacher', classes: ['8A', '8B'] },
-    ],
-    parents: [
-        { id: 'p1', name: 'Mr. Dorji', email: 'parent@school.edu', role: 'parent', linkedStudents: ['s1'] },
-        { id: 'p2', name: 'Mrs. Sherpa', email: 'sherpa.parent@school.edu', role: 'parent', linkedStudents: ['s2'] },
-    ],
-    admins: [
-        { id: 'a1', name: 'Principal Rinchen', email: 'admin@school.edu', role: 'admin' },
-    ],
-    creators: [
-        { id: 'c1', name: 'Ms. Priya Sharma', email: 'creator@school.edu', role: 'creator', expertise: ['Mathematics', 'Science'], bio: 'Passionate educator with 10 years of experience' },
-        { id: 'c2', name: 'Mr. Rajesh Kumar', email: 'rajesh.creator@school.edu', role: 'creator', expertise: ['English', 'Social Studies'], bio: 'Making learning fun and engaging' },
-    ]
+  operator: {
+    id: 'operator-demo-1',
+    name: 'Pipeline Operator',
+    email: 'demo@operator',
+    role: 'operator',
+    phone: '+91 98765 43210',
+  },
+  admin: {
+    id: 'admin-demo-1',
+    name: 'Program Admin',
+    email: 'demo@admin',
+    role: 'admin',
+    phone: '+91 90000 00000',
+  },
+};
+
+const normalizeProfile = (profileRecord, fallbackUser = null) => {
+  if (!profileRecord && !fallbackUser) {
+    return null;
+  }
+
+  return {
+    ...fallbackUser,
+    ...profileRecord,
+    id: profileRecord?.id || fallbackUser?.id || null,
+    email: profileRecord?.email || fallbackUser?.email || '',
+    role: profileRecord?.role || fallbackUser?.user_metadata?.role || fallbackUser?.role || 'operator',
+    name:
+      profileRecord?.name ||
+      profileRecord?.full_name ||
+      fallbackUser?.user_metadata?.full_name ||
+      fallbackUser?.user_metadata?.name ||
+      fallbackUser?.email ||
+      'Operator',
+  };
+};
+
+const getDemoUserFromEmail = (email = '') => {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  if (normalizedEmail.includes('admin')) {
+    return MOCK_USERS.admin;
+  }
+
+  if (normalizedEmail.includes('operator') || normalizedEmail.includes('demo@')) {
+    return MOCK_USERS.operator;
+  }
+
+  return null;
 };
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [profile, setProfile] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [isOnline, setIsOnline] = useState(isSupabaseConfigured);
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (isSupabaseConfigured && supabase) {
-            // Check existing Supabase session
-            supabase.auth.getSession().then(({ data: { session } }) => {
-                if (session?.user) {
-                    setUser(session.user);
-                    loadProfile(session.user.id);
-                }
-                setLoading(false);
-            });
+  useEffect(() => {
+    let isMounted = true;
 
-            // Listen for auth changes
-            const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-                if (session?.user) {
-                    setUser(session.user);
-                    loadProfile(session.user.id);
-                } else {
-                    setUser(null);
-                    setProfile(null);
-                }
-            });
-
-            return () => subscription.unsubscribe();
-        } else {
-            // Offline mode: check localStorage
-            const savedUser = localStorage.getItem('ct_user');
-            if (savedUser) {
-                const parsed = JSON.parse(savedUser);
-                setUser(parsed);
-                setProfile(parsed);
-            }
-            setLoading(false);
+    const loadSession = async () => {
+      if (!isSupabaseConfigured || !supabase) {
+        const savedUser = localStorage.getItem('ais_pipeline_user');
+        if (savedUser && isMounted) {
+          const parsed = JSON.parse(savedUser);
+          setUser(parsed);
+          setProfile(parsed);
         }
-    }, []);
+        if (isMounted) {
+          setLoading(false);
+        }
+        return;
+      }
 
-    const loadProfile = async (userId) => {
-        const profileData = await db.getProfile(userId);
-        setProfile(profileData);
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (session?.user) {
+        setUser(session.user);
+        const profileData = await db.getProfile(session.user.id);
+        if (isMounted) {
+          setProfile(normalizeProfile(profileData, session.user));
+        }
+      }
+
+      if (isMounted) {
+        setLoading(false);
+      }
     };
 
-    // Login function - works with both Supabase and offline mode
-    const login = async (email, password, role) => {
-        if (isSupabaseConfigured && supabase) {
-            // Supabase auth
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password
-            });
+    loadSession();
 
-            if (error) {
-                // If real login fails, check if it's a demo request
-                if (email.includes('demo@')) {
-                    return loginDemo(email, role);
-                }
-                return { success: false, error: error.message };
-            }
+    if (!isSupabaseConfigured || !supabase) {
+      return () => {
+        isMounted = false;
+      };
+    }
 
-            return { success: true, user: data.user };
-        } else {
-            // Offline mode
-            return loginDemo(email, role);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!isMounted) {
+        return;
+      }
+
+      if (session?.user) {
+        setUser(session.user);
+        const profileData = await db.getProfile(session.user.id);
+        if (isMounted) {
+          setProfile(normalizeProfile(profileData, session.user));
         }
-    };
-
-    // Demo login for offline mode
-    const loginDemo = (email, role) => {
-        let foundUser = null;
-
-        if (role === 'student') {
-            foundUser = MOCK_USERS.students.find(u => u.email === email);
-        } else if (role === 'teacher') {
-            foundUser = MOCK_USERS.teachers.find(u => u.email === email);
-        } else if (role === 'parent') {
-            foundUser = MOCK_USERS.parents.find(u => u.email === email);
-        } else if (role === 'admin') {
-            foundUser = MOCK_USERS.admins.find(u => u.email === email);
-        } else if (role === 'creator') {
-            foundUser = MOCK_USERS.creators.find(u => u.email === email);
-        }
-
-        // Allow demo login with any email containing the role
-        if (!foundUser && email.includes(role)) {
-            foundUser = {
-                id: `demo_${Date.now()}`,
-                name: `Demo ${role.charAt(0).toUpperCase() + role.slice(1)}`,
-                email,
-                role,
-                class: role === 'student' ? '8A' : undefined,
-                classes: role === 'teacher' ? ['8A'] : undefined,
-                expertise: role === 'creator' ? ['General'] : undefined
-            };
-        }
-
-        if (foundUser) {
-            setUser(foundUser);
-            setProfile(foundUser);
-            localStorage.setItem('ct_user', JSON.stringify(foundUser));
-            return { success: true, user: foundUser };
-        }
-
-        return { success: false, error: 'Invalid credentials. Use demo email like "demo@student" for testing.' };
-    };
-
-    // Signup function
-    const signup = async (email, password, name, role) => {
-        if (isSupabaseConfigured && supabase) {
-            const { data, error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    data: { name, role }
-                }
-            });
-
-            if (error) {
-                return { success: false, error: error.message };
-            }
-
-            return { success: true, user: data.user };
-        } else {
-            // For offline mode, just do demo login
-            return loginDemo(email, role);
-        }
-    };
-
-    const logout = async () => {
-        if (isSupabaseConfigured && supabase) {
-            await supabase.auth.signOut();
-        }
+      } else {
         setUser(null);
         setProfile(null);
-        localStorage.removeItem('ct_user');
-    };
+      }
 
-    // Update profile
-    const updateProfile = async (updates) => {
-        if (isSupabaseConfigured && user?.id) {
-            const updated = await db.updateProfile(user.id, updates);
-            if (updated) setProfile(updated);
-            return updated;
-        } else {
-            // Offline mode
-            const newProfile = { ...profile, ...updates };
-            setProfile(newProfile);
-            localStorage.setItem('ct_user', JSON.stringify(newProfile));
-            return newProfile;
-        }
-    };
+      if (isMounted) {
+        setLoading(false);
+      }
+    });
 
-    const value = {
-        user,
-        profile: profile || user, // Fallback to user for offline mode
-        loading,
-        login,
-        signup,
-        logout,
-        updateProfile,
-        isAuthenticated: !!user,
-        isStudent: (profile || user)?.role === 'student',
-        isTeacher: (profile || user)?.role === 'teacher',
-        isParent: (profile || user)?.role === 'parent',
-        isAdmin: (profile || user)?.role === 'admin',
-        isCreator: (profile || user)?.role === 'creator',
-        isOnline,
-        isSupabaseConfigured
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
     };
+  }, []);
 
-    return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    );
+  const loginDemo = (email) => {
+    const foundUser = getDemoUserFromEmail(email);
+
+    if (!foundUser) {
+      return {
+        success: false,
+        error: 'Use demo@operator or demo@admin for local testing.',
+      };
+    }
+
+    setUser(foundUser);
+    setProfile(foundUser);
+    localStorage.setItem('ais_pipeline_user', JSON.stringify(foundUser));
+
+    return { success: true, user: foundUser };
+  };
+
+  const login = async (email, password) => {
+    if (!isSupabaseConfigured || !supabase) {
+      return loginDemo(email);
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      if (email.toLowerCase().includes('demo@')) {
+        return loginDemo(email);
+      }
+
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, user: data.user };
+  };
+
+  const logout = async () => {
+    if (isSupabaseConfigured && supabase) {
+      await supabase.auth.signOut();
+    }
+
+    setUser(null);
+    setProfile(null);
+    localStorage.removeItem('ais_pipeline_user');
+  };
+
+  const updateProfile = async (updates) => {
+    if (isSupabaseConfigured && user?.id) {
+      const updatedProfile = await db.updateProfile(user.id, updates);
+      if (updatedProfile) {
+        setProfile(normalizeProfile(updatedProfile, user));
+      }
+      return updatedProfile;
+    }
+
+    const merged = { ...(profile || user), ...updates };
+    setProfile(merged);
+    setUser(merged);
+    localStorage.setItem('ais_pipeline_user', JSON.stringify(merged));
+    return merged;
+  };
+
+  const resolvedProfile = profile || user;
+
+  const value = {
+    user,
+    profile: resolvedProfile,
+    loading,
+    login,
+    logout,
+    updateProfile,
+    isAuthenticated: !!user,
+    isAdmin: resolvedProfile?.role === 'admin',
+    isOperator: resolvedProfile?.role === 'operator',
+    canManagePipeline: ['admin', 'operator'].includes(resolvedProfile?.role),
+    isSupabaseConfigured,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within AuthProvider');
-    }
-    return context;
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+
+  return context;
 };
 
 export default AuthContext;

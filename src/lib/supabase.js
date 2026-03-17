@@ -1,14 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+const supabaseKey =
+    process.env.REACT_APP_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.REACT_APP_SUPABASE_ANON_KEY;
 
 // Check if Supabase is configured
-export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey);
+export const isSupabaseConfigured = !!(supabaseUrl && supabaseKey);
 
 // Create client only if configured
 export const supabase = isSupabaseConfigured
-    ? createClient(supabaseUrl, supabaseAnonKey)
+    ? createClient(supabaseUrl, supabaseKey)
     : null;
 
 // Helper to check if we're in offline/demo mode
