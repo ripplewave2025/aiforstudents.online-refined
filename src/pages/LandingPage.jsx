@@ -55,14 +55,14 @@ const TimelineStep = ({ number, title, description, isLast }) => (
 );
 
 /* ─── Floating Image Card ─── */
-const FloatingCard = ({ rotate = 0, delay = 0, className = '', children }) => (
+const FloatingCard = ({ rotate = 0, delay = 0, className = '', style = {}, children }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-    style={{ rotate }}
-    whileHover={{ rotate: 0, y: -8, transition: { duration: 0.4 } }}
-    className={`absolute glass rounded-2xl shadow-float overflow-hidden cursor-pointer ${className}`}
+    style={{ rotate, ...style }}
+    whileHover={{ rotate: 0, scale: 1.02, transition: { duration: 0.4 } }}
+    className={`absolute rounded-2xl shadow-float cursor-pointer ${className}`}
   >
     {children}
   </motion.div>
@@ -94,8 +94,10 @@ const LightSweep = () => (
 export const LandingPage = () => {
   const navigate = useNavigate();
   const heroRef  = useRef(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 800], [0, -120]);
+  const y2 = useTransform(scrollY, [0, 800], [0, -60]);
+  const y3 = useTransform(scrollY, [0, 800], [0, -180]);
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#191c1d] overflow-x-hidden font-sans">
@@ -185,25 +187,27 @@ export const LandingPage = () => {
             </motion.div>
 
             {/* Right: Floating overlapping cards — Obsidian style with explicit parallax */}
-            <motion.div style={{ y: heroY }} className="relative h-[320px] sm:h-[450px] lg:h-[600px] w-full pointer-events-none select-none mt-4 lg:mt-0">
-              <FloatingCard rotate={-3} delay={0.3} className="w-[50%] lg:w-[60%] h-[40%] lg:h-[35%] top-[5%] lg:top-[12%] right-[5%] lg:right-[10%] opacity-90 z-10 shadow-[0_20px_40px_rgba(9,20,38,0.15)]">
-                <LightSweep />
-                <img src="/hero_lamahatta.png" alt="Lamahatta" className="w-full h-full object-cover" />
+            <motion.div className="relative h-[320px] sm:h-[450px] lg:h-[600px] w-full pointer-events-none select-none mt-4 lg:mt-0">
+              <FloatingCard rotate={-3} delay={0.3} style={{ y: y1 }} className="w-[60%] lg:w-[65%] top-[5%] lg:top-[12%] right-[5%] lg:right-[10%] z-10 shadow-[0_20px_40px_rgba(9,20,38,0.15)] bg-white p-2 sm:p-3 overflow-hidden">
+                <div className="w-full h-full relative rounded-xl sm:rounded-[20px] overflow-hidden aspect-[4/3] shadow-inner">
+                  <LightSweep />
+                  <img src="/hero_lamahatta.png" alt="Lamahatta" className="w-full h-full object-cover shadow-inner" />
+                </div>
               </FloatingCard>
               
-              <FloatingCard rotate={2} delay={0.5} className="w-[45%] lg:w-[45%] h-[35%] lg:h-[28%] top-[35%] lg:top-[42%] left-[5%] lg:left-[10%] opacity-80 z-20 shadow-[0_20px_40px_rgba(30,41,59,0.15)]">
-                <LightSweep />
-                <div className="w-full h-full bg-gradient-to-br from-[#091426] to-[#1e293b] flex items-center justify-center">
+              <FloatingCard rotate={2} delay={0.5} style={{ y: y2 }} className="w-[45%] lg:w-[45%] top-[50%] lg:top-[42%] left-[5%] lg:left-[10%] z-20 shadow-[0_20px_40px_rgba(30,41,59,0.15)] overflow-hidden rounded-[24px] sm:rounded-[36px]">
+                <div className="w-full aspect-[1/1] sm:aspect-[4/3] bg-gradient-to-br from-[#091426] to-[#1e293b] flex items-center justify-center relative shadow-inner">
+                  <LightSweep />
                   <GraduationCap className="w-10 lg:w-16 h-10 lg:h-16 text-white/30" />
                 </div>
               </FloatingCard>
               
-              <FloatingCard rotate={-1.5} delay={0.7} className="w-[55%] lg:w-[50%] h-[35%] lg:h-[28%] bottom-[5%] lg:bottom-[8%] right-[5%] opacity-90 z-30 shadow-[0_20px_40px_rgba(9,20,38,0.12)]">
-                <LightSweep />
-                <div className="w-full h-full bg-[#edeeef] flex flex-col items-center justify-center gap-1.5 p-4 text-center">
-                  <p className="text-[10px] lg:text-xs uppercase tracking-widest text-[#45474c] font-semibold">Schools</p>
+              <FloatingCard rotate={-1.5} delay={0.7} style={{ y: y3 }} className="w-[48%] lg:w-[40%] bottom-[5%] lg:bottom-[8%] right-[5%] z-30 shadow-[0_20px_40px_rgba(9,20,38,0.12)] bg-white/50 backdrop-blur-3xl overflow-hidden shadow-inner border border-white/40">
+                <div className="w-full h-full bg-white/50 flex flex-col items-center justify-center gap-1.5 p-5 text-center relative pointer-events-none">
+                  <LightSweep />
+                  <p className="text-[10px] lg:text-xs uppercase tracking-widest text-[#45474c] font-semibold mt-1">Schools</p>
                   <p className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-[#091426]">400+</p>
-                  <p className="text-[9px] lg:text-[10px] text-[#45474c] leading-tight mt-1">Across districts</p>
+                  <p className="text-[9px] lg:text-[10px] text-[#45474c] leading-tight mt-1 mb-1">Across districts</p>
                 </div>
               </FloatingCard>
             </motion.div>
@@ -345,17 +349,32 @@ export const LandingPage = () => {
               { Icon: Mail,          title: 'Google Workspace',       desc: 'Gmail, Classroom, Drive, Meet. Unlimited accounts. Teacher sees every student\'s progress live.',    accent: '#4285F4' },
               { Icon: FileSpreadsheet, title: 'Microsoft 365',         desc: 'Word, Teams, OneNote, Excel. Free for every teacher in the school.',                               accent: '#00A4EF' },
               { Icon: Palette,       title: 'Canva for Education',    desc: 'Posters, worksheets, presentations. Free for every teacher to create beautiful content.',           accent: '#7C3AED' },
-              { Icon: Bot,           title: 'AI Learning Tools',      desc: 'AI tutors in Hindi and local languages. Every student gets a private tutor at home.',               accent: '#0891B2' },
+              { Icon: Bot,           title: 'AI Learning Tools',      desc: 'AI tutors natively in Nepali and Hindi. Every student gets a private tutor at home.', images: ['/schoolyard.jpg', '/classroom.jpg'], accent: '#0891B2' },
               { Icon: Eye,           title: 'Student Visibility',     desc: 'See who submitted, who didn\'t, who is falling behind. In real time.',                             accent: '#059669' },
               { Icon: Building2,     title: 'Official School Identity',desc: 'Every teacher gets name@schoolname.in — a permanent professional email identity.',                 accent: '#45474c' },
             ].map((item, i) => (
-              <motion.div key={i} variants={fadeUp} custom={i} className="card-hover bg-white rounded-2xl p-7 shadow-card group relative overflow-hidden">
+              <motion.div key={i} variants={fadeUp} custom={i} className={`card-hover bg-white rounded-2xl p-7 shadow-card group relative overflow-hidden ${item.images ? 'md:col-span-2' : ''}`}>
                 <LightSweep />
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style={{ background: `${item.accent}15` }}>
-                  <item.Icon className="w-5 h-5" style={{ color: item.accent }} strokeWidth={1.5} />
+                <div className={`flex flex-col h-full ${item.images ? 'md:flex-row gap-6 items-center' : ''}`}>
+                  <div className={item.images ? 'flex-1' : ''}>
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style={{ background: `${item.accent}15` }}>
+                      <item.Icon className="w-5 h-5" style={{ color: item.accent }} strokeWidth={1.5} />
+                    </div>
+                    <h3 className="font-heading text-lg font-semibold text-[#191c1d] mb-2">{item.title}</h3>
+                    <p className="text-[#45474c] leading-relaxed font-light text-sm">{item.desc}</p>
+                  </div>
+                  
+                  {item.images && (
+                    <div className="flex-1 flex gap-3 mt-5 md:mt-0 w-full">
+                      {item.images.map((img, idx) => (
+                        <div key={idx} className="flex-1 rounded-xl overflow-hidden aspect-[4/3] shadow-inner relative group-hover:shadow-float transition-all bg-[#f3f4f5]">
+                           <img src={img} alt="School setup" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none" />
+                           <div className="absolute inset-0 bg-gradient-to-t from-[#091426]/20 to-transparent pointer-events-none" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <h3 className="font-heading text-lg font-semibold text-[#191c1d] mb-2">{item.title}</h3>
-                <p className="text-[#45474c] leading-relaxed font-light text-sm">{item.desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -397,19 +416,19 @@ export const LandingPage = () => {
 
           <div className="grid md:grid-cols-2 gap-10 items-center max-w-5xl mx-auto">
             {/* Founder card */}
-            <motion.div variants={fadeUp} className="relative">
-              <div className="card-hover glass rounded-[28px] overflow-hidden shadow-float">
-                <div className="relative overflow-hidden">
-                  <img src="/hero_lamahatta.png" alt="Lamahatta, Darjeeling" className="w-full h-52 object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#091426]/60 to-transparent" />
-                  <div className="absolute bottom-4 left-6">
+            <motion.div variants={fadeUp} className="relative z-10 w-full max-w-sm mx-auto md:max-w-none">
+              <div className="card-hover bg-white rounded-[28px] overflow-hidden shadow-float p-2 sm:p-3 pb-8">
+                <div className="relative overflow-hidden rounded-[20px] shadow-inner mb-6 flex bg-[#f3f4f5]">
+                  <img src="/hero_lamahatta.png" alt="Lamahatta, Darjeeling" className="w-full aspect-[4/3] sm:aspect-[16/9] object-cover pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#091426]/60 to-transparent pointer-events-none" />
+                  <div className="absolute bottom-4 left-5">
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-white/70" />
-                      <span className="text-white/80 text-xs font-light tracking-wide">Lamahatta, Darjeeling</span>
+                      <MapPin className="w-3.5 h-3.5 text-white/90" />
+                      <span className="text-white text-xs font-medium tracking-wide">Lamahatta, Darjeeling</span>
                     </div>
                   </div>
                 </div>
-                <div className="p-7">
+                <div className="px-5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#45474c] mb-2">Founder</p>
                   <h3 className="font-heading text-2xl font-bold text-[#191c1d] mb-1">Upesh Bishwakarma</h3>
                   <p className="text-[#45474c] text-sm font-light mb-5">Creative Technologist · AI Builder · Lamahatta</p>
