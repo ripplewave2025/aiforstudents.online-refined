@@ -189,9 +189,9 @@ export const LandingPage = () => {
             {/* Right: Floating overlapping cards — Obsidian style with explicit parallax */}
             <motion.div className="relative h-[320px] sm:h-[450px] lg:h-[600px] w-full pointer-events-none select-none mt-4 lg:mt-0">
               <FloatingCard rotate={-3} delay={0.3} style={{ y: y1 }} className="w-[60%] lg:w-[65%] top-[5%] lg:top-[12%] right-[5%] lg:right-[10%] z-10 shadow-[0_20px_40px_rgba(9,20,38,0.15)] bg-white p-2 sm:p-3 overflow-hidden">
-                <div className="w-full h-full relative rounded-xl sm:rounded-[20px] overflow-hidden aspect-[4/3] shadow-inner">
+                <div className="w-full h-full relative rounded-xl sm:rounded-[20px] overflow-hidden aspect-[4/3] shadow-inner bg-[#f3f4f5]">
                   <LightSweep />
-                  <img src="/hero_lamahatta.png" alt="Lamahatta" className="w-full h-full object-cover shadow-inner" />
+                  <img src="/schoolyard.jpg" alt="Local School" className="w-full h-full object-cover shadow-inner pointer-events-none" />
                 </div>
               </FloatingCard>
               
@@ -349,7 +349,7 @@ export const LandingPage = () => {
               { Icon: Mail,          title: 'Google Workspace',       desc: 'Gmail, Classroom, Drive, Meet. Unlimited accounts. Teacher sees every student\'s progress live.',    accent: '#4285F4' },
               { Icon: FileSpreadsheet, title: 'Microsoft 365',         desc: 'Word, Teams, OneNote, Excel. Free for every teacher in the school.',                               accent: '#00A4EF' },
               { Icon: Palette,       title: 'Canva for Education',    desc: 'Posters, worksheets, presentations. Free for every teacher to create beautiful content.',           accent: '#7C3AED' },
-              { Icon: Bot,           title: 'AI Learning Tools',      desc: 'AI tutors natively in Nepali and Hindi. Every student gets a private tutor at home.', images: ['/schoolyard.jpg', '/classroom.jpg'], accent: '#0891B2' },
+              { Icon: Bot,           title: 'AI Learning Tools',      desc: 'AI tutors natively in Nepali and Hindi. Every student gets a private tutor at home.', images: ['/classroom.jpg'], accent: '#0891B2' },
               { Icon: Eye,           title: 'Student Visibility',     desc: 'See who submitted, who didn\'t, who is falling behind. In real time.',                             accent: '#059669' },
               { Icon: Building2,     title: 'Official School Identity',desc: 'Every teacher gets name@schoolname.in — a permanent professional email identity.',                 accent: '#45474c' },
             ].map((item, i) => (
@@ -419,7 +419,7 @@ export const LandingPage = () => {
             <motion.div variants={fadeUp} className="relative z-10 w-full max-w-sm mx-auto md:max-w-none">
               <div className="card-hover bg-white rounded-[28px] overflow-hidden shadow-float p-2 sm:p-3 pb-8">
                 <div className="relative overflow-hidden rounded-[20px] shadow-inner mb-6 flex bg-[#f3f4f5]">
-                  <img src="/hero_lamahatta.png" alt="Lamahatta, Darjeeling" className="w-full aspect-[4/3] sm:aspect-[16/9] object-cover pointer-events-none" />
+                  <img src="/founder.jpg" alt="Upesh Bishwakarma" className="w-full aspect-[4/3] sm:aspect-[16/9] object-cover pointer-events-none" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#091426]/60 to-transparent pointer-events-none" />
                   <div className="absolute bottom-4 left-5">
                     <div className="flex items-center gap-2">
