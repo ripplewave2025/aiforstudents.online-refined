@@ -379,7 +379,7 @@ export const LandingPage = () => {
             ))}
           </motion.div>
           <motion.div variants={fadeUp} className="text-center mt-10">
-            <p className="text-[#45474c] font-light italic">Many other possibilities. This is the beginning.</p>
+            <p className="text-[#45474c] font-light italic">Many other possibilities. This is just the beginning.</p>
           </motion.div>
         </motion.div>
       </Section>
@@ -433,8 +433,8 @@ export const LandingPage = () => {
                   <h3 className="font-heading text-2xl font-bold text-[#191c1d] mb-1">Upesh Bishwakarma</h3>
                   <p className="text-[#45474c] text-sm font-light mb-5">Creative Technologist · AI Builder · Lamahatta</p>
                   {/* Social links */}
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <a href="mailto:upeshinmars42@gmail.com" className="w-9 h-9 rounded-xl glass shadow-card flex items-center justify-center hover:shadow-float transition-all group" title="Email">
+                  <div className="flex items-center gap-3 flex-wrap mt-6">
+                    <a href="mailto:contacts@aiforstudents.online" className="w-9 h-9 rounded-xl glass shadow-card flex items-center justify-center hover:shadow-float transition-all group" title="Official Email">
                       <Mail className="w-4 h-4 text-[#45474c] group-hover:text-[#191c1d]" />
                     </a>
                     <a href="https://github.com/ripplewave2025" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-xl glass shadow-card flex items-center justify-center hover:shadow-float transition-all group" title="GitHub">
@@ -490,11 +490,11 @@ export const LandingPage = () => {
               </div>
 
               {/* Projects mini grid */}
-              <div>
+              <div className="mt-8">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#45474c] mb-3">Current Focus</p>
-                <div className="grid grid-cols-2 gap-3">
-                  {['aiforstudents.online', 'Multi-agent AI', 'Knowledge Compression', 'LamahattaOS'].map((p) => (
-                    <div key={p} className="card-hover glass rounded-xl px-4 py-3 shadow-card text-sm text-[#191c1d] font-light">{p}</div>
+                <div className="grid gap-3">
+                  {['aiforstudents.online', 'Multi-agent swarm', 'Hyper-personalised digital assistant', 'Helping SMBs automate their business'].map((p) => (
+                    <div key={p} className="card-hover glass rounded-xl px-5 py-3.5 shadow-card text-[15px] text-[#191c1d] font-medium tracking-wide border border-white/60">{p}</div>
                   ))}
                 </div>
               </div>
