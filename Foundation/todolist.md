@@ -8,7 +8,14 @@ communication pipelines and visibility.
 Handoff
 
 
-Our rewards
-
-**Case Studies**
-TBD
+**Roadmap Phase 1**
+1. Communiate with headmaster
+2. get a permission from DI
+3. Get a Domain for school
+4. Setup Website
+5. Setup Google Workspace for Education
+6. Setup Emails for teachers and Institutional Email
+7. Train teachers on Education with google's websites.
+8. Give them materials and resources to use in class and setup AI for teachers to use.
+9. Create communities to share Resources.
+10. Get a findings and reports from teachers and get critical feedback and prepare for Phase 2.

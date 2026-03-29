@@ -12,3 +12,5 @@ Give them tools and techniques and visual reprsentation of data of students wher
 
 **Principle**
 Read all teachers reports and tools
+
+

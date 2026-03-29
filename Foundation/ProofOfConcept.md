@@ -15,7 +15,7 @@ No underserved school should be left behind in the age of AI.
 **WHAT YOUR SCHOOL ALREADY HAS — AND THAT IS ENOUGH**
 
 At least one working internet connection
-At least 2 computers or smartphones
+At least 2 computers or smartphones (or smartphone is enough)
 
 Nothing else is needed to get started.
 
@@ -40,7 +40,7 @@ AI Learning Tools — AI tutors in Hindi and local languages, with diagrams. Eve
 Student visibility — See who submitted, who didn't, who is falling behind. In real time.
 Official school identity — Every teacher gets name@[schoolname].in permanently.
 Many other possibilities.
-This is the beginning.
+This is just the beginning.
 
 **THE 30-DAY PROCESS**
 
