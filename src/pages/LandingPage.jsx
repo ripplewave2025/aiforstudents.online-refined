@@ -307,7 +307,49 @@ export const LandingPage = () => {
   // Translation state
   const [lang, setLang] = useState('en');
   const t = translations[lang];
-  const [podcastOpen, setPodcastOpen] = useState(false);
+
+  // Spotify Iframe API state
+  const [embedController, setEmbedController] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [spotifyBlocked, setSpotifyBlocked] = useState(false);
+  const spotifyIframeRef = useRef(null);
+
+  React.useEffect(() => {
+    // Check if script already exists (for React StrictMode / HMR)
+    if (!document.querySelector('script[src="https://open.spotify.com/embed/iframe-api/v1"]')) {
+      const script = document.createElement("script");
+      script.src = "https://open.spotify.com/embed/iframe-api/v1";
+      script.async = true;
+      script.onerror = () => setSpotifyBlocked(true);
+      document.body.appendChild(script);
+    }
+
+    window.onSpotifyIframeApiReady = (IFrameAPI) => {
+      const element = spotifyIframeRef.current;
+      if (!element) return;
+      const options = {
+        uri: 'spotify:episode:77jsgsVSuRGRfxpu6EhnS9',
+        width: '100%',
+        height: '152' // compact height
+      };
+      const callback = (EmbedController) => {
+        setEmbedController(EmbedController);
+        EmbedController.addListener('playback_update', e => {
+          setIsPlaying(!e.data.isPaused);
+        });
+      };
+      IFrameAPI.createController(element, options, callback);
+    };
+  }, []);
+
+  const handlePodcastAction = () => {
+    if (spotifyBlocked || !embedController) {
+      // Fallback if browser tracking protection blocks the iframe
+      window.open('https://open.spotify.com/episode/77jsgsVSuRGRfxpu6EhnS9', '_blank');
+      return;
+    }
+    embedController.togglePlay();
+  };
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#191c1d] overflow-x-hidden font-sans">
@@ -371,46 +413,54 @@ export const LandingPage = () => {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
             
             <motion.div initial="hidden" animate="visible" variants={stagger} className="flex flex-col items-center lg:items-start text-center lg:text-left mt-10 lg:mt-0">
+              {/* ── Hidden Spotify Iframe for Audio Control ── */}
+              <div style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
+                <div ref={spotifyIframeRef}></div>
+              </div>
+
               {/* ── Spotify Now Playing bar ── */}
               <motion.div variants={fadeUp} className="w-full max-w-sm mb-6 mx-auto lg:mx-0">
-                {!podcastOpen ? (
-                  <div
-                    onClick={() => setPodcastOpen(true)}
-                    className="cursor-pointer flex items-center gap-3 glass rounded-2xl p-3 shadow-card border border-white/60 hover:shadow-float transition-all group"
-                  >
-                    {/* Thumbnail */}
-                    <div className="relative shrink-0 w-11 h-11 rounded-xl overflow-hidden">
-                      <img src="/classroom.jpg" alt="episode" className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-[#091426]/20" />
-                    </div>
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <svg width="9" height="9" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                        <span className="text-[9px] uppercase tracking-widest text-[#45474c] font-semibold">Upesh's Show · 18:16</span>
+                <div
+                  onClick={handlePodcastAction}
+                  className="cursor-pointer flex items-center gap-3 glass rounded-2xl p-3 shadow-card border border-white/60 hover:shadow-float transition-all group"
+                >
+                  {/* Thumbnail / Playback animation */}
+                  <div className="relative shrink-0 w-11 h-11 rounded-xl overflow-hidden">
+                    <img src="/classroom.jpg" alt="episode" className={`w-full h-full object-cover transition-transform duration-700 ${isPlaying ? 'scale-110' : 'scale-100'}`} />
+                    <div className="absolute inset-0 bg-[#091426]/20" />
+                    {isPlaying && (
+                      <div className="absolute inset-0 flex items-center justify-center gap-0.5 bg-black/40 backdrop-blur-[1px]">
+                        <motion.span animate={{ height: [4, 12, 4] }} transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut" }} className="w-1 bg-[#1DB954] rounded-full" />
+                        <motion.span animate={{ height: [8, 16, 8] }} transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut", delay: 0.2 }} className="w-1 bg-[#1DB954] rounded-full" />
+                        <motion.span animate={{ height: [4, 12, 4] }} transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut", delay: 0.4 }} className="w-1 bg-[#1DB954] rounded-full" />
                       </div>
-                      <p className="text-[#191c1d] text-[11px] font-semibold truncate">लामहाट्टाका विद्यालयहरूको लागि डिजिटल पूर्वाधार</p>
+                    )}
+                  </div>
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                      <span className="text-[9px] uppercase tracking-widest text-[#45474c] font-semibold">{t.hero.nowPlaying || "Upesh's Show · 18:16"}</span>
                     </div>
-                    {/* Glowing play button */}
-                    <motion.div
-                      animate={{ boxShadow: ['0 0 0 0px rgba(29,185,84,0.8)', '0 0 0 10px rgba(29,185,84,0.15)', '0 0 0 20px rgba(29,185,84,0)'] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
-                      className="w-10 h-10 rounded-full bg-[#1DB954] flex items-center justify-center shrink-0"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="white" style={{ marginLeft: '2px' }}><path d="M8 5v14l11-7z"/></svg>
-                    </motion.div>
+                    <p className="text-[#191c1d] text-[11px] font-semibold truncate">लामहाट्टाका विद्यालयहरूको लागि डिजिटल पूर्वाधार</p>
                   </div>
-                ) : (
-                  <div className="rounded-2xl overflow-hidden shadow-float border border-white/20">
-                    <iframe
-                      src="https://open.spotify.com/embed/episode/77jsgsVSuRGRfxpu6EhnS9?utm_source=generator&autoplay=1"
-                      width="100%" height="152" frameBorder="0" allowFullScreen
-                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                      style={{ display: 'block', borderRadius: '16px' }}
-                      title="Founder's Podcast Episode"
-                    />
-                  </div>
-                )}
+                  {/* Glowing play/pause button */}
+                  <motion.div
+                    animate={isPlaying ? {} : { boxShadow: ['0 0 0 0px rgba(29,185,84,0.8)', '0 0 0 10px rgba(29,185,84,0.15)', '0 0 0 20px rgba(29,185,84,0)'] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
+                    className="w-10 h-10 rounded-full bg-[#1DB954] flex items-center justify-center shrink-0"
+                  >
+                    {isPlaying ? (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                      </svg>
+                    ) : (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="white" style={{ marginLeft: '2px' }}>
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    )}
+                  </motion.div>
+                </div>
               </motion.div>
 
               <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass shadow-card mb-8">
