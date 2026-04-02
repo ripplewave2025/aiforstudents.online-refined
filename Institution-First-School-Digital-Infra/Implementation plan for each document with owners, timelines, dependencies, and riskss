@@ -1,0 +1,215 @@
+This section provides a rigorous execution checklist so the repository can be created immediately and refined later, consistent with NEP’s “pilot-first” orientation. 
+
+Roles used in this plan
+Because individual names are unspecified, the plan assigns work by role:
+
+Program Lead: overall design, training delivery, quality, metrics, reporting.
+School Signatory: approval, legitimacy, internal enforcement.
+Admin Steward: accounts, recovery, permissions, continuity, device/internet coordination.
+Teacher Champion A/B: adoption, feedback loops, community rituals, template creation.
+Support: troubleshooting, onboarding/offboarding assistance.
+30/60/90-day master timeline (mermaid)
+05-Apr
+12-Apr
+19-Apr
+26-Apr
+03-May
+10-May
+17-May
+24-May
+31-May
+07-Jun
+14-Jun
+21-Jun
+28-Jun
+05-Jul
+Approvals, roles, scope lock
+Admin setup + recovery doc
+Domain/identity setup
+Metrics baseline + dashboard
+Shared repository + structure
+Monthly review cycle (x2)
+Meeting minutes workflow
+Forms-based assessment
+Circular + archive workflow
+Level 1 PD (accounts/docs/forms)
+Level 2 PD (workflow mastery)
+Level 3 PD (Responsible AI staff)
+Proof packet + replication kit
+Level 4 PD (champion + sustain)
+Governance & identity
+Backbone workflows
+Teacher enablement
+Proof & scale
+Lamahatta institution-first pilot (30/60/90 day)
+
+
+Show code
+Document-by-document implementation checklist
+The table below lists the minimum tasks to produce usable v0.1 drafts in Week 1–2, then refine them through the pilot.
+
+Doc	Primary owner	Week 1–2 deliverable (v0.1)	By day 30	By day 60	By day 90	Key dependencies	Key risks
+00_Project_Index.md	Program Lead	Scope boundaries + roles + cadence	Weekly update rhythm adopted	Index reflects what’s actually happening	Frozen v1.0 + fork plan	Signatory clarity	Becomes shelfware if not used weekly
+01_Mission_Vision_Principles.md	Program Lead + Signatory	Mission/vision + “in/out” scope	Used in every stakeholder communication	Updated with pilot learnings	Locked for replication kit	Agreement on staying teacher/institution-first	Scope creep into student-facing too early
+02_Problem_Statement.md	Program Lead	Diagnosis + “institution offline” definition	Backed by Lamahatta baseline evidence	Updated with local realities	Used in proof packet	Baseline survey + infra scan	Over-generalization; lacks local facts
+03_NEP2020_Alignment.md	Program Lead	Quote bank + alignment map	Referenced in approval notes	Includes pilot evidence tie-back	Included in pitch packet	NEP text + interpretation	Too long; reads like compliance not strategy
+04_Institution_First_Model.md	Admin Steward + Program Lead	MVSO stack + checklists	Domain/admin/repo live	Onboarding/offboarding tested	Continuity validated via mock handover	Tool choice decision	Admin ownership failure; password loss
+05_Teacher_Workload_Offloading.md	Teacher Champions + Program Lead	5 workflows + 5 prompts	5 workflows used weekly	Asset library ≥20 items	Asset library ≥40 + reuse evidence	Teacher time availability	Tools add workload if templates not tight
+06_Teacher_Community_and_Discovery.md	Teacher Champions	Weekly ritual + rules + roles	4 weekly rituals completed	8 weekly rituals + monthly share	Teacher community self-sustaining	Safe channel chosen	Community dies without rituals
+07_Lamahatta_Pilot_Plan.md	Program Lead + Signatory	30/60/90 plan + milestones	Day-30 review completed	Day-60 review completed	Proof packet ready	Approvals + device access	Delays from exams, events, connectivity
+08_Governance_Safety_and_Policy.md	Signatory + Admin Steward	Staff policy + data rules + incident plan	All staff acknowledge	First internal audit (spot-check)	Handover pack finalized	DPDP awareness + tool policy	Privacy breach; fear reduces adoption
+09_Metrics_Proof_and_Reporting.md	Program Lead	Dashboard metrics + weekly report format	Baseline + 4 weekly updates	Trend charts + 2 monthly reports	Final report + replication kit	Data capture discipline	Metrics become burden if too complex
+10_School_Pitch_One_Pager.md	Program Lead + Signatory	One-page pitch + short FAQ	Used for 1 external conversation	Updated with Lamahatta proof	Public-ready pitch for scaling	Proof artifacts	Overpromising; vague commitments
+
+Tooling, workflows, metrics dashboard, and command-centre design
+Tool choice: Google-first vs Microsoft-first vs hybrid (decision table)
+This table compares stacks using criteria that matter for institution-first, teacher-centred implementation.
+
+Criterion	Google-first (Workspace for Education)	Microsoft-first (Microsoft 365 Education)	Hybrid approach
+Core collaboration surface	Core services include Gmail, Drive, Docs, Forms, Classroom, Meet, Sites, etc. 
+Teams, Word/Excel/PowerPoint web, OneNote, etc; education AI materials emphasize Copilot Chat + efficiency + security posture. 
+Use one as primary identity + repository; integrate the other only if needed
+Privacy posture baseline	Core services: no ads; school-managed accounts; privacy notice clarifies core vs additional services. 
+Education AI pages position Copilot Chat and security; training emphasizes readiness and secure management. 
+Higher governance complexity; avoid unless you have strong admin capacity
+Teacher training availability	Large ecosystem; training varies by region and partner	Microsoft Educator Center + AI learning paths; programs and PD hours emphasized. 
+Requires dual training tracks
+Offline/low bandwidth resilience	Docs/Drive offline modes depend on device setup; DIKSHA can complement for PD and content. 
+Teams and web apps depend on connectivity; can still operate with local docs + periodic sync	Hybrid can worsen low-bandwidth experience
+Interoperability / portability	Exportable documents; institutional ownership can be configured	Exportable documents; stronger integration if school already uses Microsoft	Risk of split-brain repository
+Recommended for Lamahatta pilot	Prefer the stack teachers will actually use daily without friction	Prefer if school already uses Microsoft identities or has strong IT support	Use hybrid only if there’s a clear need
+
+Interpretation: choose the first stack based on staff familiarity and available admin capacity; your “institution online” outcome depends more on governance and habits than on vendor choice.
+
+Responsible AI staff policy templates grounded in DPDP obligations
+Even in a teacher/institution-only phase, staff will generate documents and may handle personal data (staff phone numbers, HR records, meeting notes). DPDP Act principles relevant to your school policy include:
+
+consent and notice requirements for processing (structure of notices and consent quality), 
+“reasonable security safeguards” to prevent personal data breach, 
+breach intimation obligations, 
+and special protections around children (important to pre-commit now, even if student focus is later). 
+A tight staff policy should therefore include:
+
+Data classification: public / internal / confidential.
+AI usage boundaries: which classes of data may never be input into AI tools.
+Verification rule: “AI drafts; humans decide.”
+Breach response: a one-page incident workflow and contact chain.
+Access control: role-based access + 2-admin recovery.
+Teacher PD pathway levels 1–4 (curriculum + session plan + rubric)
+NEP specifies CPD expectations and explicitly includes online teacher development modules and platforms to share best practices. 
+ A Level 1–4 pathway ensures that CPD does not remain “tool training,” but becomes measurable capability-building.
+
+Level 1: Institutional basics (accounts + repository habits)
+Goal: every participating teacher can use official identity and store/share institutional documents.
+
+Session 1 (90 min): accounts, password hygiene, login recovery (no personal accounts for institutional work).
+Session 2 (90 min): shared drive structure, naming conventions, upload/download, offline access basics.
+Assessment rubric (pass/fail + proficiency):
+Can create and share a document with correct permissions.
+Can find and reuse an existing template.
+Can submit a weekly plan via the shared repository.
+Level 2: Workflow mastery (5 core workflows)
+Goal: reduce workload via repeatable routines.
+
+Session 3 (75 min): meeting minutes + action tracking workflow.
+Session 4 (75 min): forms-based assessment + auto summaries.
+Session 5 (75 min): circular drafting + archive + retrieval.
+Rubric:
+
+Completes workflow without help.
+Uses template correctly.
+Produces artifacts that are reusable.
+Level 3: Responsible AI for staff (low-risk first)
+Goal: safe productivity gains with verification.
+
+Grounding: UNESCO emphasizes inclusion/equity and policy governance for AI in education. 
+ OECD principles reinforce trustworthy AI aligned to rights and democratic values. 
+
+Session 6 (90 min): “Allowed vs Restricted” AI uses; data handling; hallucination and verification.
+Session 7 (60 min): prompt patterns for lesson planning, rubrics, feedback banks (teacher verifies).
+Rubric:
+Never inputs personal data into public AI.
+Verifies outputs against textbook/official sources.
+Produces a lesson artifact with a verification note.
+Level 4: Champion capability (train-the-trainer + sustainment)
+Goal: the school sustains practice without external push.
+
+Session 8 (90 min): facilitator skills, micro-coaching, measuring adoption.
+Session 9 (60 min): community rituals, template curation, onboarding new teachers.
+Rubric:
+Runs weekly ritual.
+Helps another teacher complete a workflow.
+Adds at least 5 reusable assets to the library.
+Metrics dashboard design and sample charts
+Your dashboard should be “command-centre ready,” but lightweight enough that teachers don’t resent it.
+
+KPI set grounded in school realities (UDISE + NEP)
+UDISE+ data indicates partial internet/computer facility coverage; thus, you must track institution readiness and adoption, not just “AI usage.” 
+ NEP also expects technology use for planning and management. 
+
+Core dashboard KPI table (sample)
+
+KPI	Definition	Target by day 30	Target by day 60	Target by day 90
+Staff accounts activated	% teachers able to login and use official account	60%	85%	95%
+Weekly Active Teachers	# teachers who used repository/workflow this week	2–4	6–10	10+ (or all staff)
+Shared repository artifacts	# docs/forms/minutes created in school repository	20	60	120
+Workflows adopted	Count of the “core 5” used weekly by champions	2	4	5
+Time saved (self-report)	Average hrs/week saved per teacher	baseline	+1 hr	+2 hrs
+Policy acknowledgement	% staff signed Responsible AI + data handling	100% champions	80%	100%
+Incidents	# privacy/tool incidents + closure time	tracked	trend down	stable low
+
+Mermaid chart: status distribution (example)
+
+45%
+30%
+18%
+8%
+Pilot tasks by status (example)
+Done
+In progress
+Blocked
+Not started
+
+
+Show code
+Mermaid flow: command-centre workflow
+
+Weekly review meeting
+
+Metrics snapshot
+
+Top 3 needle-movers
+
+Assign owners + deadlines
+
+Update repository artifacts
+
+Community ritual: share 1 win + 1 friction
+
+
+
+Show code
+Lamahatta pilot resource list, consent templates, and scripts
+Because Lamahatta is teacher/institution-first and phones may be restricted in-school, build around staff devices and shared school devices.
+
+Minimum resources (pilot-ready)
+
+One shared laptop/desktop (if available) + login access.
+One admin steward device for recovery tasks.
+A stable internet point at least weekly (hotspot acceptable).
+A printer is optional but helpful for offline bridging.
+Staff consent / acknowledgement (template elements)
+Ground this in DPDP-style consent quality (“free, specific, informed, unambiguous”) and in security safeguards expectations. 
+
+Include:
+
+what accounts are created and why,
+what staff data is stored (name, role, official email),
+acceptable use,
+data handling and AI rules,
+where to report issues.
+Communication scripts (short)
+
+To head/principal: “We are not introducing student AI. We are building institutional identity, teacher workflows, and governance aligned to NEP.”
+To teachers: “You will save time; you won’t do more reporting. We are standardizing what you already do and making it reusable.”
+To department/cluster: “Pilot is designed as a measurable proof packet (artifacts + metrics) for replication.”
